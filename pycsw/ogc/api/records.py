@@ -188,7 +188,7 @@ class API:
             pretty_print = str2bool(self.config['server'].get('pretty_print', False))
             content = to_json(data, pretty_print)
 
-        headers['Content-Length'] = len(content)
+        headers['Content-Length'] = len(content.encode('utf-8'))
 
         return headers, status, content
 
@@ -1200,6 +1200,10 @@ def record2json(record, url, collection, mode='ogcapi-records'):
         if isinstance(record.otherconstraints, str) and record.otherconstraints not in [None, 'None']:
             record.otherconstraints = [record.otherconstraints]
             record_dict['properties']['license'] = ", ".join(record.otherconstraints)
+
+    if record.conditionapplyingtoaccessanduse:
+        if isinstance(record.conditionapplyingtoaccessanduse, str) and record.conditionapplyingtoaccessanduse not in [None, 'None']:
+            record_dict['properties']['rights'] = record.conditionapplyingtoaccessanduse
 
     record_dict['properties']['updated'] = record.insert_date
 
