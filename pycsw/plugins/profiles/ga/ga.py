@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
 # =================================================================
 #
-# Author: Vincent Fazio <vincent.fazio@csiro.au>
+# Author: Nicholas Car <nick@kurrawong.ai>
 #
-# Copyright (c) 2023 CSIRO Australia
+# Copyright (c) 2025 KurrawongAI
+#
+# This profile builds on the iso19115p3 profile supplied with pyCSW
+# v3 by Vincent Fazio (CSIRO)
 #
 # Permission is hereby granted, free of charge, to any person
 # obtaining a copy of this software and associated documentation
@@ -66,7 +69,7 @@ TOPIC_CATEGORY_CODES = {
 }
 
 
-class GaProfile(profile.Profile):
+class GA(profile.Profile):
     """ GaProfile class represents the profile for input and output of ISO 19115 Part 3 XML
     """
     def __init__(self, model, namespaces, context):
@@ -260,7 +263,7 @@ class GaProfile(profile.Profile):
         }
 
         profile.Profile.__init__(self,
-            name='gaprofile',
+            name='ga',
             version='1.0.0',
             title='GA Profile of ISO 19115-3 XML Metadata',
             url='http://ga.gov.au',
@@ -312,7 +315,7 @@ class GaProfile(profile.Profile):
 
         # Copied from: https://github.com/geonetwork/core-geonetwork/tree/main/schemas/iso19115-3.2018/src/main/plugin/iso19115-3.2018/schema/standards.iso.org/19115/-3/mdb/1.0
         schema_file = os.path.join(self.context.pycsw_home, 'plugins',
-                                   'profiles', 'gaprofile', 'schemas', 'ogc',
+                                   'profiles', 'iso19115p3', 'schemas', 'ogc',
                                    'iso', 'iso19115-3', 'mdb', '1.0', 'mdb.xsd')
 
         schema = etree.parse(schema_file, self.context.parser).getroot()
@@ -325,7 +328,7 @@ class GaProfile(profile.Profile):
         parentSchema='mdb.xsd')
 
         schema_file = os.path.join(self.context.pycsw_home, 'plugins',
-                                   'profiles', 'gaprofile', 'schemas', 'ogc',
+                                   'profiles', 'iso19115p3', 'schemas', 'ogc',
                                    'iso', 'iso19115-3', 'srv', '2.0',
                                    'serviceInformation.xsd')
 
