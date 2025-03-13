@@ -899,20 +899,44 @@ class GA(profile.Profile):
 
     # new functions
     def _write_string(self, node: Element, path: list, value: str):
+        """Write out a single XML string literal Element at the end of a path of XML Elements it will create
+
+        :param node: XML element to attach to
+        :param path: the hierarchy of XML element names (prefixed form) that will be created
+        :param value: string literal value
+        :returns: None, but writes the new XML back to the given node"""
         etree.SubElement(
             build_path(node, path, self.namespaces),
             util.nspath_eval('gco:CharacterString', self.namespaces)
         ).text = value
 
-    def _write_code(self, node: Element, path: list, code: str, value: str):
+    def _write_code(self, node: Element, path: list, codelist_iri: str, value: str):
+        """Write out a single XML codelist Element at the end of a path of XML Elements it will create.
+
+        This function will assign the given value to both an attribute of code= and to the text value of the XML Element
+        made from the codelist_iri parameter.
+
+        :param node: XML element to attach to
+        :param path: the hierarchy of XML element names (prefixed form) that will be created
+        :param codelist_iri: the codelist IRI in prefixed form
+        :param value: the codelist value as a string
+        :returns: None, but writes the new XML back to the given node"""
         etree.SubElement(
             build_path(node, path, self.namespaces),
-            util.nspath_eval(code, self.namespaces),
-            codeList=f'{CODELIST}#{code.split(":")[1]}',
+            util.nspath_eval(codelist_iri, self.namespaces),
+            codeList=f'{CODELIST}#{codelist_iri.split(":")[1]}',
             codeListValue=value
         ).text = value
 
     def _write_date(self, node: Element, property: str, date_type: str, value: str):
+        """Write out a single data value within a cit:CI_Date > cit:date > gco:Date|gco:DateTime and
+        cit:CI_Date > cit:dateType Element hierarchy
+
+        :param node: XML element to attach to
+        :param property: the XML Element property linking the CI_Date object this function will create to the node
+        :param date_type: the date type code value from CI_DateTypeCode - a role this date plays with respect to its parent node
+        :param value: data value as a string
+        """
         d = build_path(node, [property, 'cit:CI_Date'], self.namespaces, reuse=False)
         etree.SubElement(
             build_path(d, ['cit:date'], self.namespaces),
@@ -920,7 +944,10 @@ class GA(profile.Profile):
         ).text = value
         self._write_code(d, ['cit:dateType'], 'cit:CI_DateTypeCode', date_type)
 
+    # TODO: replace static information with dynamic
     def _write_party_org_gssa(self, ci_resp):
+        """Temporary function delivering static GSSA organisation party metadata. To be replaced with dynamic lookup
+        information"""
         org = build_path(ci_resp, ['cit:party', 'cit:CI_Organisation'], self.namespaces)
         self._write_string(org, ['cit:name'], 'Geological Survey of South Australia')
 
@@ -937,9 +964,12 @@ class GA(profile.Profile):
         self._write_string(address, ['cit:country'], 'Australia')
         self._write_string(address, ['cit:electronicMailAddress'], 'dem.media@sa.gov.au')
 
+    # TODO: replace static information with dynamic
     def _write_party_point_of_contact(self, ci_resp):
+        """Temporary function delivering static GSSA individual party metadata. To be replaced with dynamic lookup
+        information"""
         person = build_path(ci_resp, ['cit:party', 'cit:CI_Individual'], self.namespaces, reuse=False)
-        self._write_string(person, ['cit:name'], 'Michael, U.')  # TODO: read real value
+        self._write_string(person, ['cit:name'], 'Michael, U.')
         self._write_string(person, ['cit:positionName'], 'Geoscience Data Systems Developer')
 # END of class
 
@@ -955,7 +985,6 @@ def get_resource_opname(operations):
         if op in ['GetMap', 'GetFeature', 'GetCoverage', 'GetObservation']:
             return op
     return None
-
 
 
 def build_path(node, path_list, nsmap, reuse=True):
