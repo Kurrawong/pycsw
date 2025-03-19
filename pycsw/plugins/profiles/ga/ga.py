@@ -117,7 +117,7 @@ class GA(profile.Profile):
 
         self.repository = {
             'mdb:MD_Metadata': {
-                'outputschema': 'http://pid.geoscience.gov.au/dataset/ga/122551',
+                'outputschema': 'http://standards.iso.org/iso/19115/-3/mdb/2.0',
                 'queryables': {
                     'SupportedGaProfileQueryables': {
                         'mdb:Subject': {'xpath': 'mdb:identificationInfo/mri:MD_DataIdentification/mri:topicCategory/mri:MD_TopicCategoryCode',
@@ -269,7 +269,7 @@ class GA(profile.Profile):
             url='http://ga.gov.au',
             namespace=self.namespaces['mdb'],
             typename='mdb:MD_Metadata',
-            outputschema='http://pid.geoscience.gov.au/dataset/ga/122551',
+            outputschema='http://standards.iso.org/iso/19115/-3/mdb/2.0',
             prefixes=['mdb'],
             model=model,
             core_namespaces=namespaces,
