@@ -138,8 +138,9 @@ class GA(profile.Profile):
                                      'dbcol': self.context.md_core_model['mappings']['pycsw:Type']},
                         # NB: Placeholder only
                         'mdb:BoundingBox': {'xpath': 'mdb:BoundingBox', 'dbcol': self.context.md_core_model['mappings']['pycsw:BoundingBox']},
-                        'mdb:VertExtentMin': {'xpath': 'gex:EX_VerticalExtent/gex:minimumValue/gco:Real', 'dbcol': self.context.md_core_model['mappings']['pycsw:VertExtentMin']},
-                        'mdb:VertExtentMax': {'xpath': 'gex:EX_VerticalExtent/gex:maximumValue/gco:Real', 'dbcol': self.context.md_core_model['mappings']['pycsw:VertExtentMax']},
+                        # TODO: find out why this data is missing
+                        # 'mdb:VertExtentMin': {'xpath': 'gex:EX_VerticalExtent/gex:minimumValue/gco:Real', 'dbcol': self.context.md_core_model['mappings']['pycsw:VertExtentMin']},
+                        # 'mdb:VertExtentMax': {'xpath': 'gex:EX_VerticalExtent/gex:maximumValue/gco:Real', 'dbcol': self.context.md_core_model['mappings']['pycsw:VertExtentMax']},
                         'mdb:CRS': {'xpath': '''concat("urn:ogc:def:crs:",
                                                        "mdb:referenceSystemInfo/mrs:MD_ReferenceSystem/mrs:referenceSystemIdentifier/mcc:MD_Identifier/mcc:codeSpace/gco:CharacterString",
                                                        ":",
