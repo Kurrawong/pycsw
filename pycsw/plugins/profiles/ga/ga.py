@@ -290,7 +290,7 @@ class GA(profile.Profile):
 
         self.inspire_config = None
 
-        server_cfg = config.get('server', {})
+        server_cfg = config["server"]
         self.ogc_schemas_base = server_cfg.get('ogc_schemas_base', 'http://schemas.opengis.net')
         self.url = server_cfg.get('url', 'http://localhost/pycsw/csw.py')
 
