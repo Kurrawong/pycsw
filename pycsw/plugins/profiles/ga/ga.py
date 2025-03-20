@@ -38,6 +38,7 @@ from xml.etree.ElementTree import Element
 from pycsw.core import config, util
 from pycsw.core.etree import etree
 from pycsw.plugins.profiles import profile
+from datetime import datetime
 
 CODELIST = 'codeListLocation'
 
@@ -716,6 +717,7 @@ class GA(profile.Profile):
                 etree.SubElement(desc, util.nspath_eval('gco:CharacterString', self.namespaces)).text = link.get('description')
 
         # resourceLineage
+        # TODO: replace this placeholder with real lineage
         resource_lineage = """
         <mdb:resourceLineage
             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -733,13 +735,7 @@ class GA(profile.Profile):
         >
             <mrl:LI_Lineage>
                 <mrl:statement>
-                    <gco:CharacterString>The GA Metadata Profile version 1.0 was developed in 2013 in accordance with the
-                        rules established by Information Management Section, Geoscience Australia. This 2018 version of the
-                        GA Profile was developed to reflect extensions Geoscience Australia has made to the new version of
-                        the international metadata standard: ISO 19115-1:2014.
-                        &lt;br&gt;July 2021 – minor modification, three previously missing values were added to the
-                        ProtocolTYpe codelist: FILE:DATA-DIRECTORY, OGC:WMTS, and OGC:WMTS-1.0.0-http-get-capabilities
-                    </gco:CharacterString>
+                    <gco:CharacterString>No lineage is available</gco:CharacterString>
                 </mrl:statement>
                 <mrl:scope>
                     <mcc:MD_Scope>
@@ -938,11 +934,23 @@ class GA(profile.Profile):
         :param date_type: the date type code value from CI_DateTypeCode - a role this date plays with respect to its parent node
         :param value: data value as a string
         """
+
+        # handle known bad date formats like 30/03/1983 - should be 1983-03-30
+        # TODO: remote this if source dates are known to be be good
+        def return_good_or_fix_bad_date(date_text):
+            if "/" in date_text:
+                try:
+                    return datetime.strftime(datetime.strptime(date_text, '%d/%m/%Y'), '%Y-%m-%d')
+                except ValueError:
+                    pass
+
+            return date_text
+
         d = build_path(node, [property, 'cit:CI_Date'], self.namespaces, reuse=False)
         etree.SubElement(
             build_path(d, ['cit:date'], self.namespaces),
             util.nspath_eval('gco:DateTime' if 'T' in value else 'gco:Date', self.namespaces),
-        ).text = value
+        ).text = return_good_or_fix_bad_date(value)
         self._write_code(d, ['cit:dateType'], 'cit:CI_DateTypeCode', date_type)
 
     # TODO: replace static information with dynamic
