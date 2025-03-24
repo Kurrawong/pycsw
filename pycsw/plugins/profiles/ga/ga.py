@@ -120,7 +120,7 @@ class GA(profile.Profile):
             'mdb:MD_Metadata': {
                 'outputschema': 'http://standards.iso.org/iso/19115/-3/mdb/2.0',
                 'queryables': {
-                    'SupportedGaProfileQueryables': {
+                    'SupportedISOQueryables': {
                         'mdb:Subject': {'xpath': 'mdb:identificationInfo/mri:MD_DataIdentification/mri:topicCategory/mri:MD_TopicCategoryCode',
                                         'dbcol': self.context.md_core_model['mappings']['pycsw:Keywords']},
                         'mdb:Title': {'xpath': 'mdb:identificationInfo/mri:MD_DataIdentification/mri:citation/cit:CI_Citation/cit:title/gco:CharacterString',
@@ -200,7 +200,7 @@ class GA(profile.Profile):
                         'mdb:OperatesOnName': {'xpath': 'mdb:identificationInfo/srv:SV_ServiceIdentification/srv:coupledResource/srv:SV_CoupledResource/srv:operationName/gco:CharacterString',
                                                'dbcol': self.context.md_core_model['mappings']['pycsw:OperatesOnName']},
                     },
-                    'AdditionalGaProfileQueryables': {
+                    'AdditionalQueryables': {
                         'mdb:Degree': {'xpath': 'mdb:dataQualityInfo/mdq:DQ_DataQuality/mdq:report/mdq:DQ_DomainConsistency/mdq:result/mdq:DQ_ConformanceResult/mdq:pass/gco:Boolean',
                                        'dbcol': self.context.md_core_model['mappings']['pycsw:Degree']},
                         'mdb:AccessConstraints': {'xpath': 'mdb:identificationInfo/mri:MD_DataIdentification/mri:resourceConstraints/mco:MD_LegalConstraints/mco:accessConstraints/mco:MD_RestrictionCode',
