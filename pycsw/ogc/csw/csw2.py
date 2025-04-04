@@ -585,20 +585,46 @@ class Csw2(object):
                         util.nspath_eval('csw:MaxValue',
                         self.parent.context.namespaces)).text = results[0][1]
                     else:
-                        listofvalues = etree.SubElement(domainvalue,
-                        util.nspath_eval('csw:ListOfValues',
-                        self.parent.context.namespaces))
-                        for result in results:
-                            LOGGER.debug(str(result))
-                            if (result is not None and
-                                result[0] is not None):  # drop null values
-                                if count:  # show counts
-                                    val = '%s (%s)' % (result[0], result[1])
-                                else:
-                                    val = result[0]
+                        # GSSA hack: split on comma and deduplicate keywords
+                        gssa_hacks = True
+                        if gssa_hacks:
+                            listofvalues = etree.SubElement(domainvalue,
+                            util.nspath_eval('csw:ListOfValues',
+                             self.parent.context.namespaces))
+
+                            individual_keywords = set()
+
+                            for result in results:
+                                LOGGER.warning(str(result))
+                                if (result is not None and
+                                    result[0] is not None):  # drop null values
+                                    if count:  # show counts
+                                        val = '%s (%s)' % (result[0], result[1])
+                                    else:
+                                        val = result[0]
+                                    for kw in val.split(","):
+                                        individual_keywords.add(kw)
+
+                            for val in sorted(individual_keywords):
                                 etree.SubElement(listofvalues,
                                 util.nspath_eval('csw:Value',
                                 self.parent.context.namespaces)).text = val
+                        else:
+                            # original code
+                            listofvalues = etree.SubElement(domainvalue,
+                            util.nspath_eval('csw:ListOfValues',
+                            self.parent.context.namespaces))
+                            for result in results:
+                                LOGGER.debug(str(result))
+                                if (result is not None and
+                                        result[0] is not None):  # drop null values
+                                    if count:  # show counts
+                                        val = '%s (%s)' % (result[0], result[1])
+                                    else:
+                                        val = result[0]
+                                    etree.SubElement(listofvalues,
+                                    util.nspath_eval('csw:Value',
+                                    self.parent.context.namespaces)).text = val
                 except Exception as err:
                     # here we fail silently back to the client because
                     # CSW tells us to
