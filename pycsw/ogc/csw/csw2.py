@@ -586,7 +586,6 @@ class Csw2(object):
                         self.parent.context.namespaces)).text = results[0][1]
                     else:
                         # GSSA hack: split on comma and deduplicate keywords
-                        gssa_hacks = True
                         if gssa_hacks:
                             listofvalues = etree.SubElement(domainvalue,
                             util.nspath_eval('csw:ListOfValues',
@@ -634,14 +633,20 @@ class Csw2(object):
     def getrecords(self):
         ''' Handle GetRecords request '''
 
+        gssa_hacks = True
+
         timestamp = util.get_today_and_now()
 
         if ('elementsetname' not in self.parent.kvp and
             'elementname' not in self.parent.kvp):
-            # mutually exclusive required
-            return self.exceptionreport('MissingParameterValue',
-            'elementsetname',
-            'Missing one of ElementSetName or ElementName parameter(s)')
+            # GSSA Hack
+            if gssa_hacks:
+                self.parent.kvp['elementsetname'] = "summary"
+            else:
+                # mutually exclusive required
+                return self.exceptionreport('MissingParameterValue',
+                'elementsetname',
+                'Missing one of ElementSetName or ElementName parameter(s)')
 
         if 'outputschema' not in self.parent.kvp:
             self.parent.kvp['outputschema'] = self.parent.context.namespaces['csw']
@@ -686,8 +691,12 @@ class Csw2(object):
             self.parent.kvp['elementsetname'] = 'summary'
 
         if 'typenames' not in self.parent.kvp:
-            return self.exceptionreport('MissingParameterValue',
-            'typenames', 'Missing typenames parameter')
+            # GSSA hack
+            if gssa_hacks:
+                self.parent.kvp['typenames'] = "csw:Record"
+            else:
+                return self.exceptionreport('MissingParameterValue',
+                'typenames', 'Missing typenames parameter')
 
         if ('typenames' in self.parent.kvp and
             self.parent.requesttype == 'GET'):  # passed via GET
@@ -1774,7 +1783,7 @@ class Csw2(object):
 
             tmp = doc.find(util.nspath_eval('csw:Query/csw:ElementSetName',
                   self.parent.context.namespaces))
-            request['elementsetname'] = tmp.text if tmp is not None else None
+            request['elementsetname'] = tmp.text if tmp is not None else "summary"
 
             tmp = doc.find(util.nspath_eval(
             'csw:Query', self.parent.context.namespaces)).attrib.get('typeNames')
@@ -1784,6 +1793,8 @@ class Csw2(object):
             request['elementname'] = [elname.text for elname in \
             doc.findall(util.nspath_eval('csw:Query/csw:ElementName',
             self.parent.context.namespaces))]
+            if len(request['elementname']) < 1:
+                request['elementname'] = ["dc:identifier"]
 
             request['constraint'] = {}
             tmp = doc.find(util.nspath_eval('csw:Query/csw:Constraint',
