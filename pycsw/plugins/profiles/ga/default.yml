@@ -80,16 +80,16 @@ metadata:
         name: Geological Survey of South Australia
         url: https://www.energymining.sa.gov.au/industry/geological-survey
     contact:
-        name: Michael, Ursula
-        position: Geoscience Data Systems Developer
+        name: Geological Survey of South Australia
+        position: Data Manager
         address: Department for Energy and Mining
         city: Adelaide
         stateorprovince: South Australia
         postalcode: "5000"
         country: Australia
-        #phone: +618-xxx-xxx-xxxx
+        phone: +61 8 8463 3000
         #fax: +xx-xxx-xxx-xxxx
-        email: Ursula.Michael@sa.gov.au
+        email: dem.media@sa.gov.au
         #url: Contact URL
         #hours: Mo-Fr 08:00-17:00
         #instructions: During hours of service. Off on weekends.

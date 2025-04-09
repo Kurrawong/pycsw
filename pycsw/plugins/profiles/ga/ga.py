@@ -572,7 +572,7 @@ class GA(profile.Profile):
             <mco:reference>
                 <cit:CI_Citation>
                     <cit:title>
-                        <gco:CharacterString>Australian Government Security ClassificationSystem</gco:CharacterString>
+                        <gco:CharacterString>Australian Government Security Classification System</gco:CharacterString>
                     </cit:title>
                     <cit:editionDate>
                         <gco:DateTime>2018-11-01T00:00:00</gco:DateTime>
