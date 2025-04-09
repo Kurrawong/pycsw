@@ -978,8 +978,8 @@ class GA(profile.Profile):
         """Temporary function delivering static GSSA individual party metadata. To be replaced with dynamic lookup
         information"""
         person = build_path(ci_resp, ['cit:party', 'cit:CI_Individual'], self.namespaces, reuse=False)
-        self._write_string(person, ['cit:name'], 'Michael, U.')
-        self._write_string(person, ['cit:positionName'], 'Geoscience Data Systems Developer')
+        self._write_string(person, ['cit:name'], 'Geological Survey of South Australia')
+        self._write_string(person, ['cit:positionName'], 'SARIG Customer Support')
 # END of class
 
 
